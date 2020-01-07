@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="2dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.amartin.marvelapplication.common.views.FixSizeImageView
+        android:id="@+id/comicImage"
+        tools:src="@tools:sample/backgrounds/scenic"
+        android:scaleType="centerInside"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.amartin.marvelapplication.common.views.ScrollTextView
+        android:id="@+id/comicName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/background_footer"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/white"
+        tools:text="@tools:sample/lorem"
+
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true" />
+
+</FrameLayout>
