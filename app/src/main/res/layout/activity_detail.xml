@@ -75,6 +75,36 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 tools:text="Lorem ipsum" />
 
+            <Button
+                android:id="@+id/translateAction"
+                android:text="@string/translate"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/translated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="gone"
+                tools:text="Lorem ipsum" />
+
+            <TextView
+                android:id="@+id/powerByYandex"
+                android:text="@string/power_by_yandex"
+                android:autoLink="web"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="end"
+                android:lines="2"
+                android:padding="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:text="@string/see_in"
                 android:layout_marginTop="16dp"

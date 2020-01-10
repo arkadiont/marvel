@@ -4,9 +4,9 @@ import com.amartin.marvelapplication.api.MarvelService
 import com.amartin.marvelapplication.api.Result
 import com.amartin.marvelapplication.api.model.CharacterDataWrapper
 import com.amartin.marvelapplication.api.model.ComicDataWrapper
-import com.amartin.marvelapplication.data.source.RemoteDataSource
+import com.amartin.marvelapplication.data.source.RemoteMarvelDataSource
 
-class MarvelCharacterRemoteDataSource(private val marvelService: MarvelService) : RemoteDataSource {
+class MarvelCharacterRemoteMarvelDataSource(private val marvelService: MarvelService) : RemoteMarvelDataSource {
 
     override suspend fun getCharacters(offset: Int): Result<CharacterDataWrapper> =
         marvelService.getCharacters(offset)

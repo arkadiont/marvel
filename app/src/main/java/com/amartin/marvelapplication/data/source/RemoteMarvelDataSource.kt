@@ -4,7 +4,7 @@ import com.amartin.marvelapplication.api.Result
 import com.amartin.marvelapplication.api.model.CharacterDataWrapper
 import com.amartin.marvelapplication.api.model.ComicDataWrapper
 
-interface RemoteDataSource {
+interface RemoteMarvelDataSource {
 
     suspend fun getCharacters(offset: Int): Result<CharacterDataWrapper>
 

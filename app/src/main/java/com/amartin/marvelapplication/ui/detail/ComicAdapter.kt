@@ -10,7 +10,7 @@ import com.amartin.marvelapplication.common.inflate
 import com.amartin.marvelapplication.common.loadUrl
 import kotlinx.android.synthetic.main.view_comic.view.*
 
-class ComicAdapter : RecyclerView.Adapter<ComicAdapter.ViewHolder>() {
+class ComicAdapter(private val listener: (ComicData) -> Unit) : RecyclerView.Adapter<ComicAdapter.ViewHolder>() {
 
     private var comics = mutableListOf<ComicData>()
 
@@ -29,6 +29,7 @@ class ComicAdapter : RecyclerView.Adapter<ComicAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val comic = comics[position]
         holder.bind(comic)
+        holder.itemView.comicImage.setOnClickListener { listener(comic) }
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

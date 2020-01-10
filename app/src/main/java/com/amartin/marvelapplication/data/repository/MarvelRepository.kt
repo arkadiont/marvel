@@ -1,13 +1,13 @@
 package com.amartin.marvelapplication.data.repository
 
-import com.amartin.marvelapplication.data.source.RemoteDataSource
+import com.amartin.marvelapplication.data.source.RemoteMarvelDataSource
 
-class MarvelRepository(private val remoteDataSource: RemoteDataSource) {
+class MarvelRepository(private val remoteMarvelDataSource: RemoteMarvelDataSource) {
 
-    suspend fun getCharacters(offset: Int = 0) = remoteDataSource.getCharacters(offset)
+    suspend fun getCharacters(offset: Int = 0) = remoteMarvelDataSource.getCharacters(offset)
 
-    suspend fun getCharacter(idCharacter: Int) = remoteDataSource.getCharacter(idCharacter)
+    suspend fun getCharacter(idCharacter: Int) = remoteMarvelDataSource.getCharacter(idCharacter)
 
-    suspend fun getComicsOfCharacter(idCharacter: Int) = remoteDataSource.getComicsOfCharacter(idCharacter)
+    suspend fun getComicsOfCharacter(idCharacter: Int) = remoteMarvelDataSource.getComicsOfCharacter(idCharacter)
 
 }

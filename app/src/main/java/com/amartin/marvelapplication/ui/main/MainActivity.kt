@@ -12,7 +12,7 @@ import com.amartin.marvelapplication.api.MarvelService
 import com.amartin.marvelapplication.common.Credentials
 import com.amartin.marvelapplication.common.startActivity
 import com.amartin.marvelapplication.common.toast
-import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteDataSource
+import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteMarvelDataSource
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.ui.detail.DetailActivity
 import com.amartin.marvelapplication.ui.main.MainViewModel.UiModel.*
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this,
             MainViewModelFactory(MarvelRepository(
-                MarvelCharacterRemoteDataSource(MarvelService.create(
+                MarvelCharacterRemoteMarvelDataSource(MarvelService.create(
                     Credentials.privateKey,
                     Credentials.publicKey)))))[MainViewModel::class.java]
 

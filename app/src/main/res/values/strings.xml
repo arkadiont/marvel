@@ -6,4 +6,7 @@
     <string name="more_details">More info:</string>
 
     <string name="not_available">Not available</string>
+
+    <string name="translate">Translate</string>
+    <string name="power_by_yandex"><b>Powered by Yandex.Translate</b>\n<u>http://translate.yandex.com</u></string>
 </resources>

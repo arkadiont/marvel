@@ -3,6 +3,8 @@ package com.amartin.marvelapplication.api.model
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+data class MarvelError(val code: Int, val status: String)
+
 data class CharacterDataWrapper(
     val code: Int,
     val status: String,

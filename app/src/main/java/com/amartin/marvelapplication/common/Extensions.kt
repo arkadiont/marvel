@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.amartin.marvelapplication.MarvelApp
 import com.amartin.marvelapplication.api.model.Thumbnail
 import com.amartin.marvelapplication.api.model.Url
 import com.bumptech.glide.Glide
@@ -30,7 +31,6 @@ fun Thumbnail.getUrl() = "${path.replaceFirst("http://", "https://")}.${extensio
 
 fun Url.getUrlHtml() = "<a href=\"${url}\">${type}</a>"
 
-
 fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) =
     Toast.makeText(this, message, duration).show()
 
@@ -40,3 +40,6 @@ inline fun <reified T : Activity> Context.intentFor(body: Intent.() -> Unit): In
 inline fun <reified T : Activity> Context.startActivity(body: Intent.() -> Unit) {
     startActivity(intentFor<T>(body))
 }
+
+val Context.app: MarvelApp
+    get() = applicationContext as MarvelApp
