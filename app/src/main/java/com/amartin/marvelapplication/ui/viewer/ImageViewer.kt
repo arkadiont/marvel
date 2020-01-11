@@ -10,6 +10,7 @@ import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import kotlinx.android.synthetic.main.activity_viewer.*
+import java.lang.IllegalStateException
 
 class ImageViewer : AppCompatActivity() {
     companion object {
