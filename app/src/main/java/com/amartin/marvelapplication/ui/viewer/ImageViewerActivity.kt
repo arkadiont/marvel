@@ -12,7 +12,7 @@ import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel
 import kotlinx.android.synthetic.main.activity_viewer.*
 import java.lang.IllegalStateException
 
-class ImageViewer : AppCompatActivity() {
+class ImageViewerActivity : AppCompatActivity() {
     companion object {
         const val MAX_ZOOM_ALLOWED = 8.0f
         const val IMAGE_URL = "ImageViewer:image"

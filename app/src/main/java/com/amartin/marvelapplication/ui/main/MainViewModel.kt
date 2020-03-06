@@ -4,16 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amartin.marvelapplication.api.model.CharacterData
 import com.amartin.marvelapplication.api.onError
 import com.amartin.marvelapplication.api.onSuccess
 import com.amartin.marvelapplication.common.Event
-import com.amartin.marvelapplication.common.Scope
+import com.amartin.marvelapplication.common.ViewModelScope
+import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModel(),
-    Scope by Scope.Impl() {
+class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModelScope() {
 
     companion object {
         private const val VISIBLE_THRESHOLD = 5
@@ -39,10 +38,6 @@ class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModel(
 
     private val _error = MutableLiveData<Event<String>>()
     val error: LiveData<Event<String>> = _error
-
-    init {
-        initScope()
-    }
 
     private fun refresh() {
         launch {
@@ -71,11 +66,6 @@ class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModel(
 
     fun onCharacterClick(character: CharacterData) {
         _navigation.value = Event(character)
-    }
-
-    override fun onCleared() {
-        cancelScope()
-        super.onCleared()
     }
 }
 

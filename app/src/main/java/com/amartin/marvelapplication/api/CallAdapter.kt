@@ -60,8 +60,8 @@ private class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy) {
         override fun onResponse(call: Call<T>, response: retrofit2.Response<T>) {
             val code = response.code()
             val result = if (code in 200 until 300) {
-                val body = response.body()
-                Result.Success(body)
+                val success = Result.Success(response.body())
+                success
             }else {
                 Result.Failure(response.errorBody()?.string() ?: ErrorCode(code).toString())
             }

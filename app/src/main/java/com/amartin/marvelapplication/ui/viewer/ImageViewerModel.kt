@@ -6,18 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amartin.marvelapplication.common.Scope
+import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import com.davemorrissey.labs.subscaleview.ImageSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
-class ImageViewerModel(private val imageUrl: String) : ViewModel(), Scope by Scope.Impl() {
-
-    init {
-        initScope()
-    }
+class ImageViewerModel(private val imageUrl: String) : ViewModelScope() {
 
     sealed class UiImageViewModel {
         object Loading : UiImageViewModel()
@@ -42,11 +38,6 @@ class ImageViewerModel(private val imageUrl: String) : ViewModel(), Scope by Sco
         withContext(Dispatchers.IO) {
             BitmapFactory.decodeStream(URL(imageUrl).openStream())
         }
-
-    override fun onCleared() {
-        cancelScope()
-        super.onCleared()
-    }
 }
 
 

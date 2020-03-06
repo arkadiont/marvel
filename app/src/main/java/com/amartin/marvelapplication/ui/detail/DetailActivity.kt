@@ -12,6 +12,9 @@ import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.api.MarvelService
 import com.amartin.marvelapplication.api.YandexService
 import com.amartin.marvelapplication.common.*
+import com.amartin.marvelapplication.common.adapter.ComicAdapter
+import com.amartin.marvelapplication.common.adapter.UrlAdapter
+import com.amartin.marvelapplication.data.database.RoomDataSource
 import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteMarvelDataSource
 import com.amartin.marvelapplication.data.impl.PermissionCheckerImpl
 import com.amartin.marvelapplication.data.impl.PlayServicesLocationDataSource
@@ -21,7 +24,7 @@ import com.amartin.marvelapplication.ui.detail.DetailViewModel.*
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.OpenActionView
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.UiCharacterModel.*
-import com.amartin.marvelapplication.ui.viewer.ImageViewer
+import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.lang.IllegalStateException
 
@@ -52,7 +55,9 @@ class DetailActivity : AppCompatActivity() {
                     PermissionCheckerImpl(app)),
                 MarvelRepository(
                     MarvelCharacterRemoteMarvelDataSource(
-                        MarvelService.create(Credentials.privateKey, Credentials.publicKey))),
+                        MarvelService.create(Credentials.privateKey, Credentials.publicKey)),
+                    RoomDataSource(app.db)
+                ),
                 YandexService.create(Credentials.yandexApikey),
                 characterId))[DetailViewModel::class.java]
 
@@ -77,11 +82,13 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initAdapters() {
-        comicAdapter = ComicAdapter(viewModel::onComicImageClick)
+        comicAdapter =
+            ComicAdapter(viewModel::onComicImageClick)
         comicRecyclerView.setHasFixedSize(true)
         comicRecyclerView.adapter = comicAdapter
 
-        urlAdapter = UrlAdapter(viewModel::onUrlClick)
+        urlAdapter =
+            UrlAdapter(viewModel::onUrlClick)
         urlRecyclerView.adapter = urlAdapter
         urlRecyclerView.setHasFixedSize(true)
     }
@@ -92,8 +99,8 @@ class DetailActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
             }
             is ActivityImageViewer -> model.url.getContentIfNotHandled()?.let {
-                startActivity<ImageViewer>{
-                    putExtra(ImageViewer.IMAGE_URL, it)
+                startActivity<ImageViewerActivity>{
+                    putExtra(ImageViewerActivity.IMAGE_URL, it)
                 }
             }
         }
@@ -124,6 +131,11 @@ class DetailActivity : AppCompatActivity() {
                 characterDescription.text =
                     if (description.isNotBlank()) description else getString(R.string.not_available)
                 urlAdapter.update(urls)
+                val icon = if (model.isFavourite) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
+                characterDetailFavorite.setImageDrawable(getDrawable(icon))
+                characterDetailFavorite.setOnClickListener {
+                    viewModel.characterFavoriteClick(model.isFavourite, model.character)
+                }
             }
         }
     }

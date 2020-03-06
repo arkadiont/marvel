@@ -1,12 +1,12 @@
-package com.amartin.marvelapplication.ui.main
+package com.amartin.marvelapplication.common.adapter
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
-import com.amartin.marvelapplication.api.model.CharacterData
 import com.amartin.marvelapplication.common.*
+import com.amartin.marvelapplication.data.model.CharacterData
 import kotlinx.android.synthetic.main.view_character.view.*
 import kotlin.properties.Delegates
 
@@ -29,7 +29,9 @@ class CharacterAdapter(private val listener: (CharacterData) -> Unit):
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_character, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = characters.size

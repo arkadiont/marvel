@@ -15,18 +15,6 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3" />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways" />
-    </com.google.android.material.appbar.AppBarLayout>
-
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"

@@ -1,13 +1,13 @@
-package com.amartin.marvelapplication.ui.detail
+package com.amartin.marvelapplication.common.adapter
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
-import com.amartin.marvelapplication.api.model.ComicData
 import com.amartin.marvelapplication.common.getUrl
 import com.amartin.marvelapplication.common.inflate
 import com.amartin.marvelapplication.common.loadUrl
+import com.amartin.marvelapplication.data.model.ComicData
 import kotlinx.android.synthetic.main.view_comic.view.*
 
 class ComicAdapter(private val listener: (ComicData) -> Unit) : RecyclerView.Adapter<ComicAdapter.ViewHolder>() {
@@ -21,7 +21,9 @@ class ComicAdapter(private val listener: (ComicData) -> Unit) : RecyclerView.Ada
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_comic, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = comics.size

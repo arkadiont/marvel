@@ -2,14 +2,14 @@ package com.amartin.marvelapplication.ui.detail
 
 import androidx.lifecycle.*
 import com.amartin.marvelapplication.api.YandexService
-import com.amartin.marvelapplication.api.model.CharacterData
-import com.amartin.marvelapplication.api.model.ComicData
-import com.amartin.marvelapplication.api.model.Url
 import com.amartin.marvelapplication.api.onError
 import com.amartin.marvelapplication.api.onSuccess
 import com.amartin.marvelapplication.common.Event
-import com.amartin.marvelapplication.common.Scope
+import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.common.getUrl
+import com.amartin.marvelapplication.data.model.CharacterData
+import com.amartin.marvelapplication.data.model.ComicData
+import com.amartin.marvelapplication.data.model.Url
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
@@ -20,11 +20,7 @@ class DetailViewModel(
     private val marvelRepository: MarvelRepository,
     private val regionRepository: RegionRepository,
     private val yandexService: YandexService,
-    private val characterId: Int) : ViewModel(), Scope by Scope.Impl() {
-
-    init {
-        initScope()
-    }
+    private val characterId: Int) : ViewModelScope() {
 
     private val _error = MutableLiveData<Event<String>>()
     val error: LiveData<Event<String>> = _error
@@ -39,7 +35,7 @@ class DetailViewModel(
 
     sealed class UiCharacterModel {
         object Loading : UiCharacterModel()
-        class CharacterContent(val character: CharacterData) : UiCharacterModel()
+        class CharacterContent(val character: CharacterData, val isFavourite: Boolean) : UiCharacterModel()
     }
 
     private val _characterModel = MutableLiveData<UiCharacterModel>()
@@ -52,12 +48,25 @@ class DetailViewModel(
     private fun getCharacterData() {
         launch {
             _characterModel.value = UiCharacterModel.Loading
+            val isFavourite = marvelRepository.getCountFavouriteCharacter(characterId) == 1
             marvelRepository.getCharacter(characterId)
                 .onSuccess {
-                    _characterModel.value = UiCharacterModel.CharacterContent(it.data.results[0])
+                    _characterModel.value = UiCharacterModel.CharacterContent(it.data.results[0], isFavourite)
                 }.onError {
                     _error.value = Event(it)
                 }
+        }
+    }
+
+    fun characterFavoriteClick(isFavourite: Boolean, character: CharacterData) {
+        launch {
+            _characterModel.value = UiCharacterModel.Loading
+            if (isFavourite) {
+                marvelRepository.deleteFavouriteCharacter(character)
+            }else {
+                marvelRepository.saveFavouriteCharacter(character)
+            }
+            _characterModel.value = UiCharacterModel.CharacterContent(character, !isFavourite)
         }
     }
 
@@ -109,11 +118,6 @@ class DetailViewModel(
                 }
         }
     }
-
-    override fun onCleared() {
-        cancelScope()
-        super.onCleared()
-    }
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -121,6 +125,7 @@ class DetailViewModelFactory(
     private val regionRepository: RegionRepository,
     private val marvelRepository: MarvelRepository,
     private val yandexService: YandexService,
+//    private val
     private val characterId: Int) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         DetailViewModel(marvelRepository, regionRepository, yandexService, characterId) as T

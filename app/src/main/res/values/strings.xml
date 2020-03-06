@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MarvelApplication</string>
+    <string name="app_name">Marvelpedia</string>
 
     <string name="description">Description:</string>
     <string name="see_in">See in:</string>
@@ -9,4 +9,6 @@
 
     <string name="translate">Translate</string>
     <string name="power_by_yandex"><b>Powered by Yandex.Translate</b>\n<u>http://translate.yandex.com</u></string>
+
+    <string name="menu_favourite">Go to favourites characters</string>
 </resources>

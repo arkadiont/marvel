@@ -13,8 +13,8 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.amartin.marvelapplication.MarvelApp
-import com.amartin.marvelapplication.api.model.Thumbnail
-import com.amartin.marvelapplication.api.model.Url
+import com.amartin.marvelapplication.data.model.Thumbnail
+import com.amartin.marvelapplication.data.model.Url
 import com.bumptech.glide.Glide
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =

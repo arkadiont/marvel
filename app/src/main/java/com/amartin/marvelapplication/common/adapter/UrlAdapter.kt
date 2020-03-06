@@ -1,11 +1,11 @@
-package com.amartin.marvelapplication.ui.detail
+package com.amartin.marvelapplication.common.adapter
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
-import com.amartin.marvelapplication.api.model.Url
 import com.amartin.marvelapplication.common.inflate
+import com.amartin.marvelapplication.data.model.Url
 import kotlinx.android.synthetic.main.view_url.view.*
 
 class UrlAdapter(private val listener: (Url) -> Unit) : RecyclerView.Adapter<UrlAdapter.ViewHolder>() {
@@ -25,7 +25,9 @@ class UrlAdapter(private val listener: (Url) -> Unit) : RecyclerView.Adapter<Url
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_url, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = urls.size

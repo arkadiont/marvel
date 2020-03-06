@@ -2,6 +2,8 @@ package com.amartin.marvelapplication.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -10,11 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.api.MarvelService
 import com.amartin.marvelapplication.common.Credentials
+import com.amartin.marvelapplication.common.adapter.CharacterAdapter
+import com.amartin.marvelapplication.common.app
 import com.amartin.marvelapplication.common.startActivity
 import com.amartin.marvelapplication.common.toast
+import com.amartin.marvelapplication.data.database.RoomDataSource
 import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteMarvelDataSource
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.ui.detail.DetailActivity
+import com.amartin.marvelapplication.ui.favourite.FavouriteActivity
 import com.amartin.marvelapplication.ui.main.MainViewModel.UiModel.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -23,17 +29,39 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: CharacterAdapter
     private lateinit var viewModel: MainViewModel
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        println("item $item")
+        return when (item.itemId) {
+            R.id.menu_item_favorite -> {
+                startActivity<FavouriteActivity>{}
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this,
             MainViewModelFactory(MarvelRepository(
                 MarvelCharacterRemoteMarvelDataSource(MarvelService.create(
                     Credentials.privateKey,
-                    Credentials.publicKey)))))[MainViewModel::class.java]
+                    Credentials.publicKey)),
+                RoomDataSource(app.db)
+            )))[MainViewModel::class.java]
 
-        adapter = CharacterAdapter(viewModel::onCharacterClick)
+        adapter = CharacterAdapter(
+            viewModel::onCharacterClick
+        )
         setupRecycler()
 
         viewModel.model.observe(this, Observer(::updateUi))
