@@ -4,11 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
+import com.amartin.marvelapplication.common.htmlLink
 import com.amartin.marvelapplication.common.inflate
 import com.amartin.marvelapplication.data.model.Url
 import kotlinx.android.synthetic.main.view_url.view.*
 
-class UrlAdapter(private val listener: (Url) -> Unit) : RecyclerView.Adapter<UrlAdapter.ViewHolder>() {
+class UrlAdapter: RecyclerView.Adapter<UrlAdapter.ViewHolder>() {
 
     private var urls = mutableListOf<Url>()
 
@@ -19,15 +20,13 @@ class UrlAdapter(private val listener: (Url) -> Unit) : RecyclerView.Adapter<Url
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(url: Url) {
-            itemView.url.text = url.type
+            itemView.url.htmlLink("""<a href="${url.url}">${url.type}</a> """)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_url, false)
-        return ViewHolder(
-            view
-        )
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = urls.size
@@ -35,6 +34,5 @@ class UrlAdapter(private val listener: (Url) -> Unit) : RecyclerView.Adapter<Url
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val url = urls[position]
         holder.bind(url)
-        holder.itemView.setOnClickListener { listener(url) }
     }
 }

@@ -21,9 +21,7 @@ class ComicAdapter(private val listener: (ComicData) -> Unit) : RecyclerView.Ada
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_comic, false)
-        return ViewHolder(
-            view
-        )
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = comics.size

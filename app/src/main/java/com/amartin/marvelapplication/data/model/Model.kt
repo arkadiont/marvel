@@ -9,6 +9,11 @@ data class CharacterData(
     val urls: List<Url>
 )
 
+data class CharacterComicData(
+    val characterData: CharacterData,
+    val comicData: List<ComicData>
+)
+
 data class Thumbnail(
     val path: String,
     val extension: String

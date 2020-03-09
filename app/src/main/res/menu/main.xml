@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_favorite_on"
         android:title="@string/menu_favourite"
         app:showAsAction="ifRoom" />
+    <item android:id="@+id/menu_about"
+        android:icon="@drawable/ic_info"
+        android:title="@string/menu_info"
+        app:showAsAction="ifRoom" />
 </menu>

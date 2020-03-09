@@ -1,21 +1,23 @@
 package com.amartin.marvelapplication.ui.main
 
+import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.api.MarvelService
-import com.amartin.marvelapplication.common.Credentials
+import com.amartin.marvelapplication.common.*
 import com.amartin.marvelapplication.common.adapter.CharacterAdapter
-import com.amartin.marvelapplication.common.app
-import com.amartin.marvelapplication.common.startActivity
-import com.amartin.marvelapplication.common.toast
 import com.amartin.marvelapplication.data.database.RoomDataSource
 import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteMarvelDataSource
 import com.amartin.marvelapplication.data.repository.MarvelRepository
@@ -36,14 +38,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println("item $item")
         return when (item.itemId) {
             R.id.menu_item_favorite -> {
                 startActivity<FavouriteActivity>{}
                 true
             }
+            R.id.menu_about -> {
+                showAbout()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showAbout() {
+        val dialog = Dialog(this)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.about)
+        dialog.findViewById<ImageView>(R.id.imageAbout).setOnClickListener { dialog.dismiss() }
+        val textView =  dialog.findViewById<TextView>(R.id.textAbout)
+        textView.htmlLink(resources.getString(R.string.text_about))
+        dialog.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,15 +69,12 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this,
             MainViewModelFactory(MarvelRepository(
-                MarvelCharacterRemoteMarvelDataSource(MarvelService.create(
-                    Credentials.privateKey,
-                    Credentials.publicKey)),
+                MarvelCharacterRemoteMarvelDataSource(
+                    MarvelService.create(Credentials.privateKey, Credentials.publicKey)),
                 RoomDataSource(app.db)
             )))[MainViewModel::class.java]
 
-        adapter = CharacterAdapter(
-            viewModel::onCharacterClick
-        )
+        adapter = CharacterAdapter(viewModel::onCharacterClick)
         setupRecycler()
 
         viewModel.model.observe(this, Observer(::updateUi))

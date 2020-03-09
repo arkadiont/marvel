@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.ViewModelScope
-import com.amartin.marvelapplication.common.getUrl
 import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.source.LocalMarvelDataSource
 import kotlinx.coroutines.launch
@@ -32,11 +31,11 @@ class FavouriteViewModel(private val localMarvelDataSource: LocalMarvelDataSourc
         }
     }
 
-    private val _navigate = MutableLiveData<Event<String>>()
-    val navigate: LiveData<Event<String>> = _navigate
+    private val _navigate = MutableLiveData<Event<Int>>()
+    val navigate: LiveData<Event<Int>> = _navigate
 
     fun onCharacterClick(character: CharacterData) {
-        _navigate.value = Event(character.thumbnail.getUrl())
+        _navigate.value = Event(character.id)
     }
 }
 

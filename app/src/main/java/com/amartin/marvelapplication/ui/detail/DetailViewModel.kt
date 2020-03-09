@@ -9,11 +9,10 @@ import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.common.getUrl
 import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.model.ComicData
-import com.amartin.marvelapplication.data.model.Url
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
-import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.OpenActionView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
@@ -26,7 +25,6 @@ class DetailViewModel(
     val error: LiveData<Event<String>> = _error
 
     sealed class Navigate {
-        class OpenActionView(val url: Event<String>) : Navigate()
         class ActivityImageViewer(val url: Event<String>) : Navigate()
     }
 
@@ -64,14 +62,17 @@ class DetailViewModel(
             if (isFavourite) {
                 marvelRepository.deleteFavouriteCharacter(character)
             }else {
-                marvelRepository.saveFavouriteCharacter(character)
+                marvelRepository.getComicsOfCharacter(character.id)
+                    .onSuccess {
+                        launch(Dispatchers.IO) {
+                            marvelRepository.saveFavouriteCharacter(character, it.data.results)
+                        }
+                    }.onError {
+                        _error.value = Event(it)
+                    }
             }
             _characterModel.value = UiCharacterModel.CharacterContent(character, !isFavourite)
         }
-    }
-
-    fun onUrlClick(url: Url) {
-        _navigation.value = OpenActionView(Event(url.url))
     }
 
     sealed class UiComicModel {
@@ -103,6 +104,10 @@ class DetailViewModel(
         _navigation.value = ActivityImageViewer(Event(comic.thumbnail.getUrl()))
     }
 
+    fun onCharacterImageClick(character: CharacterData) {
+        _navigation.value = ActivityImageViewer(Event(character.thumbnail.getUrl()))
+    }
+
     private val _translateModel = MutableLiveData<Event<String>>()
     val translateModel: LiveData<Event<String>> = _translateModel
 
@@ -125,7 +130,6 @@ class DetailViewModelFactory(
     private val regionRepository: RegionRepository,
     private val marvelRepository: MarvelRepository,
     private val yandexService: YandexService,
-//    private val
     private val characterId: Int) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         DetailViewModel(marvelRepository, regionRepository, yandexService, characterId) as T

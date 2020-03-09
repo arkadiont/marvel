@@ -11,4 +11,13 @@
     <string name="power_by_yandex"><b>Powered by Yandex.Translate</b>\n<u>http://translate.yandex.com</u></string>
 
     <string name="menu_favourite">Go to favourites characters</string>
+    <string name="menu_info">About</string>
+
+    <string name="text_about"><![CDATA[
+    <strong><b>Marvelpedia</b> is the result of the practice of Architect Coders</strong><br>
+    <a href="https://www.linkedin.com/in/arcadio-martin-garcia">My linkedin profile</a>
+    ]]></string>
+
+    <string name="favourite_empty">There is no favourite characters</string>
+
 </resources>

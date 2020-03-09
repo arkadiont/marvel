@@ -11,9 +11,10 @@ import com.amartin.marvelapplication.common.adapter.CharacterAdapter
 import com.amartin.marvelapplication.common.app
 import com.amartin.marvelapplication.common.startActivity
 import com.amartin.marvelapplication.data.database.RoomDataSource
+import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity
+import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity.Companion.CHARACTER
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Content
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Loading
-import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_favourite.*
 
 class FavouriteActivity : AppCompatActivity() {
@@ -36,10 +37,10 @@ class FavouriteActivity : AppCompatActivity() {
         viewModel.navigate.observe(this, Observer(::navigate))
     }
 
-    private fun navigate(event: Event<String>) {
+    private fun navigate(event: Event<Int>) {
         event.getContentIfNotHandled()?.let {
-            startActivity<ImageViewerActivity>{
-                putExtra(ImageViewerActivity.IMAGE_URL, it)
+            startActivity<FavouriteDetailActivity>{
+                putExtra(CHARACTER, it)
             }
         }
     }
@@ -47,7 +48,10 @@ class FavouriteActivity : AppCompatActivity() {
     private fun updateUi(model: FavouriteViewModel.UiModel) {
         progress.visibility = if (model == Loading) View.VISIBLE else View.GONE
         when (model) {
-            is Content -> adapter.characters = model.characters
+            is Content -> {
+                emptyList.visibility = if (model.characters.isEmpty()) View.VISIBLE else View.GONE
+                adapter.characters = model.characters
+            }
         }
     }
 }

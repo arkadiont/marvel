@@ -3,11 +3,7 @@ package com.amartin.marvelapplication.data.database
 import androidx.room.*
 
 @Dao
-interface MarvelDao {
-
-    @Query("SELECT id FROM Character")
-    fun getAllIds(): List<Int>
-
+interface CharacterDao {
     @Query("SELECT * FROM Character")
     fun getAll(): List<Character>
 

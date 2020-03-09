@@ -29,9 +29,7 @@ class CharacterAdapter(private val listener: (CharacterData) -> Unit):
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_character, false)
-        return ViewHolder(
-            view
-        )
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = characters.size

@@ -1,8 +1,6 @@
 package com.amartin.marvelapplication.ui.detail
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +20,6 @@ import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.*
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
-import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.OpenActionView
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.UiCharacterModel.*
 import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -87,17 +84,13 @@ class DetailActivity : AppCompatActivity() {
         comicRecyclerView.setHasFixedSize(true)
         comicRecyclerView.adapter = comicAdapter
 
-        urlAdapter =
-            UrlAdapter(viewModel::onUrlClick)
+        urlAdapter = UrlAdapter()
         urlRecyclerView.adapter = urlAdapter
         urlRecyclerView.setHasFixedSize(true)
     }
 
     private fun navigate(model: Navigate) {
         when (model) {
-            is OpenActionView -> model.url.getContentIfNotHandled()?.let {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
-            }
             is ActivityImageViewer -> model.url.getContentIfNotHandled()?.let {
                 startActivity<ImageViewerActivity>{
                     putExtra(ImageViewerActivity.IMAGE_URL, it)
@@ -125,16 +118,19 @@ class DetailActivity : AppCompatActivity() {
     private fun updateCharacterUi(model: UiCharacterModel) {
         progress.visibility = if (model == Loading) View.VISIBLE else View.GONE
         when (model) {
-            is CharacterContent -> with(model.character) {
-                characterDetailToolbar.title = name
-                characterDetailImage.loadUrl(thumbnail.getUrl())
-                characterDescription.text =
-                    if (description.isNotBlank()) description else getString(R.string.not_available)
-                urlAdapter.update(urls)
+            is CharacterContent -> {
                 val icon = if (model.isFavourite) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
-                characterDetailFavorite.setImageDrawable(getDrawable(icon))
-                characterDetailFavorite.setOnClickListener {
-                    viewModel.characterFavoriteClick(model.isFavourite, model.character)
+                with(model.character) {
+                    characterDetailToolbar.title = name
+                    characterDetailImage.loadUrl(thumbnail.getUrl())
+                    characterDetailImage.setOnClickListener { viewModel.onCharacterImageClick(this) }
+                    characterDescription.text =
+                        if (description.isNotBlank()) description else getString(R.string.not_available)
+                    urlAdapter.update(urls)
+                    characterDetailFavorite.setImageDrawable(getDrawable(icon))
+                    characterDetailFavorite.setOnClickListener {
+                        viewModel.characterFavoriteClick(model.isFavourite, model.character)
+                    }
                 }
             }
         }
