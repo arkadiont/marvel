@@ -20,4 +20,7 @@
 
     <string name="favourite_empty">There is no favourite characters</string>
 
+    <string name="base_url_marvel">https://gateway.marvel.com:443/</string>
+    <string name="base_url_yandex">https://translate.yandex.net/</string>
+
 </resources>
