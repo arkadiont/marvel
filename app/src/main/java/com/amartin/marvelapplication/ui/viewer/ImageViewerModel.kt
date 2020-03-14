@@ -4,8 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import com.davemorrissey.labs.subscaleview.ImageSource
@@ -14,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
+
 class ImageViewerModel(private val imageUrl: String,
                        uiDispatcher: CoroutineDispatcher) : ViewModelScope(uiDispatcher) {
 
@@ -40,12 +39,4 @@ class ImageViewerModel(private val imageUrl: String,
         withContext(Dispatchers.IO) {
             BitmapFactory.decodeStream(URL(imageUrl).openStream())
         }
-}
-
-
-@Suppress("UNCHECKED_CAST")
-class ImageViewerModelFactory(private val imageUrl: String,
-                              private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        ImageViewerModel(imageUrl, uiDispatcher) as T
 }

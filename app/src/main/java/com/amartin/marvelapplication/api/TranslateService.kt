@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface YandexService {
+interface TranslateService {
 
     @GET("/api/v1.5/tr.json/translate")
     suspend fun translate(@Query("text")text: String, @Query("lang")lang: String): Result<Translation>
@@ -32,7 +32,7 @@ interface YandexService {
             }
         }
 
-        fun create(apikey: String): YandexService {
+        fun create(apikey: String): TranslateService {
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(authenticator(apikey))
@@ -41,7 +41,7 @@ interface YandexService {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CallAdapterFactory())
-                .build().create(YandexService::class.java)
+                .build().create(TranslateService::class.java)
         }
     }
 

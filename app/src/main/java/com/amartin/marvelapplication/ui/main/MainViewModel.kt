@@ -2,8 +2,6 @@ package com.amartin.marvelapplication.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.amartin.marvelapplication.api.onError
 import com.amartin.marvelapplication.api.onSuccess
 import com.amartin.marvelapplication.common.Event
@@ -46,14 +44,12 @@ class MainViewModel(private val marvelRepository: MarvelRepository,
             _model.value = UiModel.Loading
             if (!isRequestInProgress) {
                 isRequestInProgress = true
-
                 marvelRepository.getAllCharacters(offset)
                     .onSuccess {
                         _model.value = UiModel.Content(it.data.results)
                     }.onError {
                         _error.value = Event(it)
                     }
-
                 isRequestInProgress = false
             }
         }
@@ -69,12 +65,4 @@ class MainViewModel(private val marvelRepository: MarvelRepository,
     fun onCharacterClick(character: CharacterData) {
         _navigation.value = Event(character)
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val marvelRepository: MarvelRepository,
-                           private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        MainViewModel(marvelRepository, uiDispatcher) as T
-
 }

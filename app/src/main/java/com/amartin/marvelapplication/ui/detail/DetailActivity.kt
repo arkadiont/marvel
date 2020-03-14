@@ -5,17 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.amartin.marvelapplication.R
-import com.amartin.marvelapplication.api.MarvelService
-import com.amartin.marvelapplication.api.YandexService
+import com.amartin.marvelapplication.api.TranslateService
 import com.amartin.marvelapplication.common.*
 import com.amartin.marvelapplication.common.adapter.ComicAdapter
 import com.amartin.marvelapplication.common.adapter.UrlAdapter
-import com.amartin.marvelapplication.data.database.RoomDataSource
-import com.amartin.marvelapplication.data.impl.MarvelCharacterRemoteMarvelDataSource
-import com.amartin.marvelapplication.data.impl.PermissionCheckerImpl
-import com.amartin.marvelapplication.data.impl.PlayServicesLocationDataSource
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.*
@@ -25,16 +19,23 @@ import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.coroutines.Dispatchers
 import java.lang.IllegalStateException
+import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val CHARACTER = "DetailActivity:character"
     }
-
-    private lateinit var viewModel: DetailViewModel
+    private var characterId: Int = -1
+    private val viewModel: DetailViewModel by lazy {
+        getViewModel{ DetailViewModel(marvelRepository, regionRepository, translateService, characterId,  Dispatchers.Main) }
+    }
     private lateinit var comicAdapter: ComicAdapter
     private lateinit var urlAdapter: UrlAdapter
+
+    @Inject lateinit var regionRepository: RegionRepository
+    @Inject lateinit var marvelRepository: MarvelRepository
+    @Inject lateinit var translateService: TranslateService
 
     private val coarsePermissionRequester =
         PermissionRequester(this, ACCESS_COARSE_LOCATION)
@@ -43,21 +44,10 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val characterId = intent.getIntExtra(CHARACTER, -1)
+        characterId = intent.getIntExtra(CHARACTER, -1)
         if (characterId == -1) throw IllegalStateException("Character not found")
 
-        viewModel = ViewModelProviders.of(this,
-            DetailViewModelFactory(
-                RegionRepository(
-                    PlayServicesLocationDataSource(app),
-                    PermissionCheckerImpl(app)),
-                MarvelRepository(
-                    MarvelCharacterRemoteMarvelDataSource(
-                        MarvelService.create(Credentials.privateKey, Credentials.publicKey)),
-                    RoomDataSource(app.db)
-                ),
-                YandexService.create(Credentials.yandexApikey),
-                characterId, Dispatchers.Main))[DetailViewModel::class.java]
+        app.component.inject(this)
 
         initAdapters()
 

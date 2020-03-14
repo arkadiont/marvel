@@ -9,7 +9,6 @@ import androidx.room.*
     val description: String?,
     val path: String,
     val extension: String
-
 )
 
 @Entity data class Comic(
@@ -21,7 +20,7 @@ import androidx.room.*
     val extension: String
 )
 
-@Entity(primaryKeys = ["characterId", "comicId"])
+@Entity(primaryKeys = ["characterId", "comicId"], indices = [Index(value = ["characterId"]), Index(value = ["comicId"])])
 data class CharacterComicRelation(val characterId: Int, val comicId: Int)
 
 data class CharacterWithComics(

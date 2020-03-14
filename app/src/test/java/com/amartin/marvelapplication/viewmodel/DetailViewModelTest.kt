@@ -3,7 +3,7 @@ package com.amartin.marvelapplication.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.amartin.marvelapplication.api.Result
-import com.amartin.marvelapplication.api.YandexService
+import com.amartin.marvelapplication.api.TranslateService
 import com.amartin.marvelapplication.api.model.Translation
 import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.getUrl
@@ -52,7 +52,7 @@ class DetailViewModelTest {
     lateinit var regionRepository: RegionRepository
 
     @Mock
-    lateinit var yandexService: YandexService
+    lateinit var translateService: TranslateService
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -61,7 +61,7 @@ class DetailViewModelTest {
 
     @Before
     fun setUp() {
-        vm = DetailViewModel(marvelRepository, regionRepository, yandexService,
+        vm = DetailViewModel(marvelRepository, regionRepository, translateService,
             characterId, Dispatchers.Unconfined)
     }
 
@@ -181,7 +181,7 @@ class DetailViewModelTest {
         val translate = "hola mundo"
         val description = "hello world"
         runBlocking {
-            whenever(yandexService.translate(description, language)).thenReturn(Result.Success(
+            whenever(translateService.translate(description, language)).thenReturn(Result.Success(
                 Translation(200, language, listOf(translate))))
             whenever(regionRepository.findLastRegionLanguage()).thenReturn(language)
             vm.translateModel.observeForever(observerTranslation)

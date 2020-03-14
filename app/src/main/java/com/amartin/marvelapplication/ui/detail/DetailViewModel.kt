@@ -1,9 +1,7 @@
 package com.amartin.marvelapplication.ui.detail
 
 import androidx.lifecycle.*
-import com.amartin.marvelapplication.api.Result
-import com.amartin.marvelapplication.api.YandexService
-import com.amartin.marvelapplication.api.model.CharacterDataWrapper
+import com.amartin.marvelapplication.api.TranslateService
 import com.amartin.marvelapplication.api.onError
 import com.amartin.marvelapplication.api.onSuccess
 import com.amartin.marvelapplication.common.Event
@@ -21,7 +19,7 @@ import kotlinx.coroutines.launch
 class DetailViewModel(
     private val marvelRepository: MarvelRepository,
     private val regionRepository: RegionRepository,
-    private val yandexService: YandexService,
+    private val translateService: TranslateService,
     private val characterId: Int, uiDispatcher: CoroutineDispatcher) : ViewModelScope(uiDispatcher) {
 
     private val _error = MutableLiveData<Event<String>>()
@@ -117,7 +115,7 @@ class DetailViewModel(
     fun onTranslateButtonClick(text: String) {
         launch {
             val language = regionRepository.findLastRegionLanguage()
-            yandexService.translate(text, language)
+            translateService.translate(text, language)
                 .onSuccess {
                     _translateModel.value = Event(it.text[0])
                 }
@@ -126,15 +124,4 @@ class DetailViewModel(
                 }
         }
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class DetailViewModelFactory(
-    private val regionRepository: RegionRepository,
-    private val marvelRepository: MarvelRepository,
-    private val yandexService: YandexService,
-    private val characterId: Int,
-    private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        DetailViewModel(marvelRepository, regionRepository, yandexService, characterId, uiDispatcher) as T
 }

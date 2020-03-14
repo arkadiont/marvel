@@ -5,8 +5,8 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.amartin.marvelapplication.R
+import com.amartin.marvelapplication.common.getViewModel
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import kotlinx.android.synthetic.main.activity_viewer.*
@@ -19,7 +19,10 @@ class ImageViewerActivity : AppCompatActivity() {
         const val IMAGE_URL = "ImageViewer:image"
     }
 
-    private lateinit var viewModel: ImageViewerModel
+    private lateinit var imageUrl: String
+    private val viewModel: ImageViewerModel by lazy {
+        getViewModel { ImageViewerModel(imageUrl, Dispatchers.Main) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +30,8 @@ class ImageViewerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_viewer)
 
         imageView.maxScale = MAX_ZOOM_ALLOWED
-        val imageUrl = intent.getStringExtra(IMAGE_URL)
-        if (imageUrl == null || imageUrl.isBlank()) throw IllegalStateException("ImageUrl not found")
-
-        viewModel = ViewModelProviders.of(this,
-            ImageViewerModelFactory(imageUrl, Dispatchers.Main))[ImageViewerModel::class.java]
+        imageUrl = intent.getStringExtra(IMAGE_URL)?.toString() ?: ""
+        if (imageUrl.isBlank()) throw IllegalStateException("ImageUrl not found")
 
         viewModel.model.observe(this, Observer(::updateUi))
     }

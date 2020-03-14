@@ -2,8 +2,6 @@ package com.amartin.marvelapplication.ui.favourite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.data.model.CharacterData
@@ -40,12 +38,4 @@ class FavouriteViewModel(
     fun onCharacterClick(character: CharacterData) {
         _navigate.value = Event(character.id)
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class FavouriteViewModelFactory(
-    private val localMarvelDataSource: LocalMarvelDataSource,
-    private val uiDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        FavouriteViewModel(localMarvelDataSource, uiDispatcher) as T
 }

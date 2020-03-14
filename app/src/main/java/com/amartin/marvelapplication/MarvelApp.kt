@@ -1,15 +1,17 @@
 package com.amartin.marvelapplication
 
 import android.app.Application
-import com.amartin.marvelapplication.data.database.MarvelDatabase
+import com.amartin.marvelapplication.di.DaggerMarvelComponent
+import com.amartin.marvelapplication.di.MarvelComponent
 
 class MarvelApp : Application() {
 
-    lateinit var db: MarvelDatabase
+    lateinit var component: MarvelComponent
         private set
 
     override fun onCreate() {
         super.onCreate()
-        db = MarvelDatabase.build(this)
+
+        component = DaggerMarvelComponent.factory().create(this)
     }
 }
