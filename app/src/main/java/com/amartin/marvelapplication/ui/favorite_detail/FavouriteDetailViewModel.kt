@@ -12,10 +12,12 @@ import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.model.ComicData
 import com.amartin.marvelapplication.data.source.LocalMarvelDataSource
 import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailViewModel.UiModel.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class FavouriteDetailViewModel(
-    private val localMarvelDataSource: LocalMarvelDataSource, private val characterId: Int): ViewModelScope() {
+    private val localMarvelDataSource: LocalMarvelDataSource,
+    private val characterId: Int, uiDispatcher: CoroutineDispatcher): ViewModelScope(uiDispatcher) {
 
     sealed class UiModel {
         object Loading : UiModel()
@@ -49,8 +51,10 @@ class FavouriteDetailViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class FavouriteDetailViewModelFactory(
-    private val localMarvelDataSource: LocalMarvelDataSource, private val characterId: Int): ViewModelProvider.Factory {
+    private val localMarvelDataSource: LocalMarvelDataSource,
+    private val characterId: Int,
+    private val uiDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        FavouriteDetailViewModel(localMarvelDataSource, characterId) as T
+        FavouriteDetailViewModel(localMarvelDataSource, characterId, uiDispatcher) as T
 
 }

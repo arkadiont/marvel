@@ -25,6 +25,7 @@ import com.amartin.marvelapplication.ui.detail.DetailActivity
 import com.amartin.marvelapplication.ui.favourite.FavouriteActivity
 import com.amartin.marvelapplication.ui.main.MainViewModel.UiModel.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 MarvelCharacterRemoteMarvelDataSource(
                     MarvelService.create(Credentials.privateKey, Credentials.publicKey)),
                 RoomDataSource(app.db)
-            )))[MainViewModel::class.java]
+            ), Dispatchers.Main))[MainViewModel::class.java]
 
         adapter = CharacterAdapter(viewModel::onCharacterClick)
         setupRecycler()

@@ -9,7 +9,7 @@ class MarvelRepository(
     private val remoteMarvelDataSource: RemoteMarvelDataSource,
     private val localMarvelDataSource: LocalMarvelDataSource) {
 
-    suspend fun getCharacters(offset: Int = 0) = remoteMarvelDataSource.getCharacters(offset)
+    suspend fun getAllCharacters(offset: Int = 0) = remoteMarvelDataSource.getCharacters(offset)
 
     suspend fun getCharacter(id: Int) = remoteMarvelDataSource.getCharacter(id)
 

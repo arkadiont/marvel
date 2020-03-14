@@ -10,9 +10,11 @@ import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.repository.MarvelRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModelScope() {
+class MainViewModel(private val marvelRepository: MarvelRepository,
+                    uiDispatcher: CoroutineDispatcher) : ViewModelScope(uiDispatcher) {
 
     companion object {
         private const val VISIBLE_THRESHOLD = 5
@@ -45,7 +47,7 @@ class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModelS
             if (!isRequestInProgress) {
                 isRequestInProgress = true
 
-                marvelRepository.getCharacters(offset)
+                marvelRepository.getAllCharacters(offset)
                     .onSuccess {
                         _model.value = UiModel.Content(it.data.results)
                     }.onError {
@@ -70,8 +72,9 @@ class MainViewModel(private val marvelRepository: MarvelRepository) : ViewModelS
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val marvelRepository: MarvelRepository) : ViewModelProvider.Factory {
+class MainViewModelFactory(private val marvelRepository: MarvelRepository,
+                           private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        MainViewModel(marvelRepository) as T
+        MainViewModel(marvelRepository, uiDispatcher) as T
 
 }

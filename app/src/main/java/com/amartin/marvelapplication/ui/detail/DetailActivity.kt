@@ -23,6 +23,7 @@ import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.Activity
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.UiCharacterModel.*
 import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.coroutines.Dispatchers
 import java.lang.IllegalStateException
 
 class DetailActivity : AppCompatActivity() {
@@ -56,7 +57,7 @@ class DetailActivity : AppCompatActivity() {
                     RoomDataSource(app.db)
                 ),
                 YandexService.create(Credentials.yandexApikey),
-                characterId))[DetailViewModel::class.java]
+                characterId, Dispatchers.Main))[DetailViewModel::class.java]
 
         initAdapters()
 

@@ -8,9 +8,12 @@ import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.data.model.CharacterData
 import com.amartin.marvelapplication.data.source.LocalMarvelDataSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
-class FavouriteViewModel(private val localMarvelDataSource: LocalMarvelDataSource): ViewModelScope() {
+class FavouriteViewModel(
+    private val localMarvelDataSource: LocalMarvelDataSource,
+    uiDispatcher: CoroutineDispatcher): ViewModelScope(uiDispatcher) {
 
     sealed class UiModel {
         object Loading : UiModel()
@@ -40,7 +43,9 @@ class FavouriteViewModel(private val localMarvelDataSource: LocalMarvelDataSourc
 }
 
 @Suppress("UNCHECKED_CAST")
-class FavouriteViewModelFactory(private val localMarvelDataSource: LocalMarvelDataSource): ViewModelProvider.Factory {
+class FavouriteViewModelFactory(
+    private val localMarvelDataSource: LocalMarvelDataSource,
+    private val uiDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        FavouriteViewModel(localMarvelDataSource) as T
+        FavouriteViewModel(localMarvelDataSource, uiDispatcher) as T
 }

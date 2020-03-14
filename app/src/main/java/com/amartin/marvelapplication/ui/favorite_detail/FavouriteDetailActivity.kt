@@ -13,6 +13,7 @@ import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailViewModel
 import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailViewModel.UiModel.Loading
 import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_favourite_detail.*
+import kotlinx.coroutines.Dispatchers
 
 class FavouriteDetailActivity: AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class FavouriteDetailActivity: AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this,
             FavouriteDetailViewModelFactory(
-                RoomDataSource(app.db), characterId))[FavouriteDetailViewModel::class.java]
+                RoomDataSource(app.db), characterId, Dispatchers.Main))[FavouriteDetailViewModel::class.java]
 
         initAdapters()
 

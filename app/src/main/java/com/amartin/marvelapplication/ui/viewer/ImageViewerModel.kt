@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.amartin.marvelapplication.common.ViewModelScope
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import com.davemorrissey.labs.subscaleview.ImageSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
-class ImageViewerModel(private val imageUrl: String) : ViewModelScope() {
+class ImageViewerModel(private val imageUrl: String,
+                       uiDispatcher: CoroutineDispatcher) : ViewModelScope(uiDispatcher) {
 
     sealed class UiImageViewModel {
         object Loading : UiImageViewModel()
@@ -42,6 +44,8 @@ class ImageViewerModel(private val imageUrl: String) : ViewModelScope() {
 
 
 @Suppress("UNCHECKED_CAST")
-class ImageViewerModelFactory(private val imageUrl: String) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = ImageViewerModel(imageUrl) as T
+class ImageViewerModelFactory(private val imageUrl: String,
+                              private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+        ImageViewerModel(imageUrl, uiDispatcher) as T
 }

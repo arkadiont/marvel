@@ -10,6 +10,7 @@ import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel
 import com.amartin.marvelapplication.ui.viewer.ImageViewerModel.UiImageViewModel.*
 import kotlinx.android.synthetic.main.activity_viewer.*
+import kotlinx.coroutines.Dispatchers
 import java.lang.IllegalStateException
 
 class ImageViewerActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class ImageViewerActivity : AppCompatActivity() {
         if (imageUrl == null || imageUrl.isBlank()) throw IllegalStateException("ImageUrl not found")
 
         viewModel = ViewModelProviders.of(this,
-            ImageViewerModelFactory(imageUrl))[ImageViewerModel::class.java]
+            ImageViewerModelFactory(imageUrl, Dispatchers.Main))[ImageViewerModel::class.java]
 
         viewModel.model.observe(this, Observer(::updateUi))
     }

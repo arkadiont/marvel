@@ -16,6 +16,7 @@ import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity.
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Content
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Loading
 import kotlinx.android.synthetic.main.activity_favourite.*
+import kotlinx.coroutines.Dispatchers
 
 class FavouriteActivity : AppCompatActivity() {
 
@@ -27,7 +28,7 @@ class FavouriteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_favourite)
 
         viewModel = ViewModelProviders.of(this,
-            FavouriteViewModelFactory(RoomDataSource(app.db)))[FavouriteViewModel::class.java]
+            FavouriteViewModelFactory(RoomDataSource(app.db), Dispatchers.Main))[FavouriteViewModel::class.java]
 
         adapter = CharacterAdapter(viewModel::onCharacterClick)
         recycler.adapter = adapter

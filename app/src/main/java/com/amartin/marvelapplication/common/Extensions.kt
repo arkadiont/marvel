@@ -21,6 +21,7 @@ import com.amartin.marvelapplication.MarvelApp
 import com.amartin.marvelapplication.data.model.Thumbnail
 import com.amartin.marvelapplication.data.model.Url
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -48,6 +49,9 @@ fun html(htmlText: String): Spanned = when {
 
 fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) =
     Toast.makeText(this, message, duration).show()
+
+fun View.snackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) =
+    Snackbar.make(this, message, duration).show()
 
 inline fun <reified T : Activity> Context.intentFor(body: Intent.() -> Unit): Intent =
     Intent(this, T::class.java).apply(body)

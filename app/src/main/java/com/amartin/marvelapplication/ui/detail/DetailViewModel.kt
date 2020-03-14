@@ -1,7 +1,9 @@
 package com.amartin.marvelapplication.ui.detail
 
 import androidx.lifecycle.*
+import com.amartin.marvelapplication.api.Result
 import com.amartin.marvelapplication.api.YandexService
+import com.amartin.marvelapplication.api.model.CharacterDataWrapper
 import com.amartin.marvelapplication.api.onError
 import com.amartin.marvelapplication.api.onSuccess
 import com.amartin.marvelapplication.common.Event
@@ -12,6 +14,7 @@ import com.amartin.marvelapplication.data.model.ComicData
 import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,7 +22,7 @@ class DetailViewModel(
     private val marvelRepository: MarvelRepository,
     private val regionRepository: RegionRepository,
     private val yandexService: YandexService,
-    private val characterId: Int) : ViewModelScope() {
+    private val characterId: Int, uiDispatcher: CoroutineDispatcher) : ViewModelScope(uiDispatcher) {
 
     private val _error = MutableLiveData<Event<String>>()
     val error: LiveData<Event<String>> = _error
@@ -130,7 +133,8 @@ class DetailViewModelFactory(
     private val regionRepository: RegionRepository,
     private val marvelRepository: MarvelRepository,
     private val yandexService: YandexService,
-    private val characterId: Int) : ViewModelProvider.Factory {
+    private val characterId: Int,
+    private val uiDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        DetailViewModel(marvelRepository, regionRepository, yandexService, characterId) as T
+        DetailViewModel(marvelRepository, regionRepository, yandexService, characterId, uiDispatcher) as T
 }

@@ -1,17 +1,22 @@
 package com.amartin.marvelapplication.common
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
-open class ViewModelScope: ViewModel(), Scope {
+open class ViewModelScope(private val uiDispatcher: CoroutineDispatcher): ViewModel(), Scope {
     override  lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = uiDispatcher + job
 
     init {
         this.initScope()
     }
 
     override fun onCleared() {
-        cancelScope()
+        this.cancelScope()
         super.onCleared()
     }
 }
