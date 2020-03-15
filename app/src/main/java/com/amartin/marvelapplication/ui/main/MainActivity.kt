@@ -16,21 +16,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.common.*
 import com.amartin.marvelapplication.common.adapter.CharacterAdapter
-import com.amartin.marvelapplication.data.repository.MarvelRepository
 import com.amartin.marvelapplication.ui.detail.DetailActivity
 import com.amartin.marvelapplication.ui.favourite.FavouriteActivity
 import com.amartin.marvelapplication.ui.main.MainViewModel.UiModel.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: CharacterAdapter
-    val viewModel: MainViewModel by lazy {
-        getViewModel { MainViewModel(marvelRepository, Dispatchers.Main) }
-    }
-    @Inject lateinit var marvelRepository: MarvelRepository
+    private val viewModel: MainViewModel by currentScope.viewModel(this)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -67,8 +63,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        app.component.inject(this)
 
         adapter = CharacterAdapter(viewModel::onCharacterClick)
         setupRecycler()

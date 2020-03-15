@@ -7,32 +7,23 @@ import androidx.lifecycle.Observer
 import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.common.Event
 import com.amartin.marvelapplication.common.adapter.CharacterAdapter
-import com.amartin.marvelapplication.common.app
-import com.amartin.marvelapplication.common.getViewModel
 import com.amartin.marvelapplication.common.startActivity
-import com.amartin.marvelapplication.data.source.LocalMarvelDataSource
 import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity
 import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity.Companion.CHARACTER
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Content
 import com.amartin.marvelapplication.ui.favourite.FavouriteViewModel.UiModel.Loading
 import kotlinx.android.synthetic.main.activity_favourite.*
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavouriteActivity : AppCompatActivity() {
 
     private lateinit var adapter: CharacterAdapter
-    private val viewModel by lazy {
-        getViewModel { FavouriteViewModel(localMarvelDataSource, Dispatchers.Main) }
-    }
-
-    @Inject lateinit var localMarvelDataSource: LocalMarvelDataSource
+    private val viewModel: FavouriteViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite)
-
-        app.component.inject(this)
 
         adapter = CharacterAdapter(viewModel::onCharacterClick)
         recycler.adapter = adapter
