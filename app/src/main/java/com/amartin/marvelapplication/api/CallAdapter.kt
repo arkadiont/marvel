@@ -50,6 +50,7 @@ private class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy) {
     override fun enqueueImpl(callback: Callback<Result<T>>) = proxy.enqueue(object: Callback<T> {
         override fun onFailure(call: Call<T>, t: Throwable) {
             val result = if (t is IOException) {
+                t.printStackTrace()
                 Result.NetworkError
             }else {
                 Result.Failure(null)

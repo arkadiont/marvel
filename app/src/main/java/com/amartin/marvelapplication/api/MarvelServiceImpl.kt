@@ -50,9 +50,11 @@ class MarvelServiceImpl(baseUrl: String, privateKey: String, publicKey: String) 
             .build()
     }
 
+    val okHttpClient = client(privateKey, publicKey)
+
     val service: MarvelService = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .client(client(privateKey, publicKey))
+        .client(okHttpClient)
         .addCallAdapterFactory(CallAdapterFactory())
         .addConverterFactory(GsonConverterFactory.create())
         .build().create(MarvelService::class.java)

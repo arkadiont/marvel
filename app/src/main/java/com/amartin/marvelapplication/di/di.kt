@@ -3,7 +3,6 @@ package com.amartin.marvelapplication.di
 import android.app.Application
 import com.amartin.marvelapplication.R
 import com.amartin.marvelapplication.api.MarvelServiceImpl
-import com.amartin.marvelapplication.api.TranslateService
 import com.amartin.marvelapplication.api.TranslateServiceImpl
 import com.amartin.marvelapplication.data.database.MarvelDatabase
 import com.amartin.marvelapplication.data.database.RoomDataSource
@@ -16,6 +15,11 @@ import com.amartin.marvelapplication.data.source.LocalMarvelDataSource
 import com.amartin.marvelapplication.data.source.LocationDataSource
 import com.amartin.marvelapplication.data.source.PermissionChecker
 import com.amartin.marvelapplication.data.source.RemoteMarvelDataSource
+import com.amartin.marvelapplication.di.NamesDI.baseUrlMarvel
+import com.amartin.marvelapplication.di.NamesDI.baseUrlYandex
+import com.amartin.marvelapplication.di.NamesDI.marvelPrivateKey
+import com.amartin.marvelapplication.di.NamesDI.marvelPublicKey
+import com.amartin.marvelapplication.di.NamesDI.yandexKey
 import com.amartin.marvelapplication.ui.detail.DetailActivity
 import com.amartin.marvelapplication.ui.detail.DetailViewModel
 import com.amartin.marvelapplication.ui.favorite_detail.FavouriteDetailActivity
@@ -36,6 +40,14 @@ import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+object NamesDI {
+    const val baseUrlMarvel = "baseUrlMarvel"
+    const val baseUrlYandex = "baseUrlYandex"
+    const val marvelPublicKey = "marvelPublicKey"
+    const val marvelPrivateKey = "marvelPrivateKey"
+    const val yandexKey = "yandexKey"
+}
+
 fun Application.initDI() {
     startKoin {
         androidLogger()
@@ -45,23 +57,25 @@ fun Application.initDI() {
 }
 
 private val appModule = module {
-    single(named("baseUrlMarvel")) { androidApplication().getString(R.string.base_url_marvel) }
-    single(named("marvelPublicKey")) { androidApplication().getString(R.string.marvel_public_key) }
-    single(named("marvelPrivateKey")) { androidApplication().getString(R.string.marvel_private_key) }
+    single(named(baseUrlMarvel)) { androidApplication().getString(R.string.base_url_marvel) }
+    single(named(marvelPublicKey)) { androidApplication().getString(R.string.marvel_public_key) }
+    single(named(marvelPrivateKey)) { androidApplication().getString(R.string.marvel_private_key) }
+    single {
+        MarvelServiceImpl(
+            get(named(baseUrlMarvel)),
+            get(named(marvelPrivateKey)),
+            get(named(marvelPublicKey)))
+    }
     single<RemoteMarvelDataSource> {
-        MarvelCharacterRemoteMarvelDataSource(
-            MarvelServiceImpl(
-                get(named("baseUrlMarvel")),
-                get(named("marvelPrivateKey")),
-                get(named("marvelPublicKey"))).service
-    ) }
+        MarvelCharacterRemoteMarvelDataSource( get<MarvelServiceImpl>().service )
+    }
 
-    single(named("baseUrlYandex")) { androidApplication().getString(R.string.base_url_yandex) }
-    single(named("yandexKey")) { androidApplication().getString(R.string.yandex_key) }
-    single<TranslateService> {
+    single(named(baseUrlYandex)) { androidApplication().getString(R.string.base_url_yandex) }
+    single(named(yandexKey)) { androidApplication().getString(R.string.yandex_key) }
+    single {
         TranslateServiceImpl(
-            get(named("baseUrlYandex")),
-            get(named("yandexKey"))).service
+            get(named(baseUrlYandex)),
+            get(named(yandexKey))).service
     }
 
     single { MarvelDatabase.build(get()) }
