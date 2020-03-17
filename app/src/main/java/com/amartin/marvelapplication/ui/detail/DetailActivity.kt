@@ -6,36 +6,28 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.amartin.marvelapplication.R
-import com.amartin.marvelapplication.api.TranslateService
 import com.amartin.marvelapplication.common.*
 import com.amartin.marvelapplication.common.adapter.ComicAdapter
 import com.amartin.marvelapplication.common.adapter.UrlAdapter
-import com.amartin.marvelapplication.data.repository.MarvelRepository
-import com.amartin.marvelapplication.data.repository.RegionRepository
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.*
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.Navigate.ActivityImageViewer
 import com.amartin.marvelapplication.ui.detail.DetailViewModel.UiCharacterModel.*
 import com.amartin.marvelapplication.ui.viewer.ImageViewerActivity
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.coroutines.Dispatchers
-import java.lang.IllegalStateException
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val CHARACTER = "DetailActivity:character"
     }
-    private var characterId: Int = -1
-    private val viewModel: DetailViewModel by lazy {
-        getViewModel{ DetailViewModel(marvelRepository, regionRepository, translateService, characterId,  Dispatchers.Main) }
-    }
     private lateinit var comicAdapter: ComicAdapter
     private lateinit var urlAdapter: UrlAdapter
-
-    @Inject lateinit var regionRepository: RegionRepository
-    @Inject lateinit var marvelRepository: MarvelRepository
-    @Inject lateinit var translateService: TranslateService
+    private val viewModel: DetailViewModel by currentScope.viewModel(this) {
+        parametersOf(intent.getIntExtra(CHARACTER, -1))
+    }
 
     private val coarsePermissionRequester =
         PermissionRequester(this, ACCESS_COARSE_LOCATION)
@@ -43,11 +35,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-        characterId = intent.getIntExtra(CHARACTER, -1)
-        if (characterId == -1) throw IllegalStateException("Character not found")
-
-        app.component.inject(this)
 
         initAdapters()
 
