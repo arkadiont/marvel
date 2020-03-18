@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
 import com.amartin.marvelapplication.api.MarvelServiceImpl
 import com.amartin.marvelapplication.di.NamesDI
 import com.amartin.marvelapplication.utils.dispatcher
@@ -28,6 +29,10 @@ abstract class TestBaseUi<T : Activity>(activityClass: Class<T>) : KoinTest {
 
     @get:Rule
     val activityTestRule = ActivityTestRule(activityClass, false, false)
+
+    @get:Rule
+    val grantPermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant("android.permission.ACCESS_COARSE_LOCATION")
 
     @Before
     fun setUp() {
