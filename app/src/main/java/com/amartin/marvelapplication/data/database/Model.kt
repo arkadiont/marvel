@@ -20,6 +20,14 @@ import androidx.room.*
     val extension: String
 )
 
+@Entity(indices = [Index(value = ["characterId"])]) data class Url(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int,
+    val characterId: Int,
+    val type: String,
+    val url: String
+)
+
 @Entity(primaryKeys = ["characterId", "comicId"], indices = [Index(value = ["characterId"]), Index(value = ["comicId"])])
 data class CharacterComicRelation(val characterId: Int, val comicId: Int)
 
@@ -34,5 +42,10 @@ data class CharacterWithComics(
             parentColumn = "characterId",
             entityColumn = "comicId"
         )
-    ) var comics: List<Comic>
+    ) var comics: List<Comic>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "characterId",
+        entity = Url::class
+    ) var urls: List<Url>
 )

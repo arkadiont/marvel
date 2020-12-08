@@ -90,6 +90,7 @@ class DetailActivity : AppCompatActivity() {
         progress.visibility = if (model == UiComicModel.Loading) View.VISIBLE else View.GONE
         when (model) {
             is UiComicModel.ComicsContent -> comicAdapter.updateComicList(model.comics)
+            else -> return
         }
     }
 
@@ -111,6 +112,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
             }
+            else -> return
         }
     }
 }

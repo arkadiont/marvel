@@ -7,7 +7,10 @@ data class CharacterData(
     val resourceURI: String,
     val thumbnail: Thumbnail,
     val urls: List<Url>
-)
+){
+    fun getWikiUrl(): String? =
+        urls.firstOrNull { it.type.equals("wiki", ignoreCase = true) }?.url
+}
 
 data class CharacterComicData(
     val characterData: CharacterData,

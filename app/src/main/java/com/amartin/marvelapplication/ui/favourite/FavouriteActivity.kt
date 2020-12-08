@@ -48,6 +48,7 @@ class FavouriteActivity : AppCompatActivity() {
                 emptyList.visibility = if (model.characters.isEmpty()) View.VISIBLE else View.GONE
                 adapter.characters = model.characters
             }
+            else -> return
         }
     }
 }
