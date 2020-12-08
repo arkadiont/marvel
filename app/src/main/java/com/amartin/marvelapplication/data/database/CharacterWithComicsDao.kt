@@ -14,4 +14,7 @@ interface CharacterWithComicsDao {
     @Transaction
     @Query("SELECT * FROM Character WHERE id = :characterId")
     fun getCharacterWithComics(characterId: Int):CharacterWithComics
+
+    @Query("DELETE FROM CharacterComicRelation WHERE characterId = :characterId")
+    fun deleteComicRelationFrom(characterId: Int)
 }

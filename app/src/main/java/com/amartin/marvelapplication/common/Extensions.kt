@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
@@ -33,6 +34,10 @@ fun TextView.htmlLink(source: String) {
     movementMethod = LinkMovementMethod.getInstance()
 }
 
+fun TextView.html(source: String) {
+    text = HtmlCompat.fromHtml(source, HtmlCompat.FROM_HTML_MODE_LEGACY)
+}
+
 fun Thumbnail.getUrl() = "${path.replaceFirst("http://", "https://")}.${extension}"
 
 fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) =
@@ -40,6 +45,10 @@ fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) =
 
 fun View.snackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) =
     Snackbar.make(this, message, duration).show()
+
+fun AppCompatActivity.snackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+    findViewById<View>(android.R.id.content).snackBar(message, duration)
+}
 
 inline fun <reified T : Activity> Context.intentFor(body: Intent.() -> Unit): Intent =
     Intent(this, T::class.java).apply(body)

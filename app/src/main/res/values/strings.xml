@@ -6,6 +6,7 @@
     <string name="more_details">More info:</string>
 
     <string name="not_available">Not available</string>
+    <string name="get_more_info">Try More Info</string>
 
     <string name="translate">Translate</string>
     <string name="power_by_yandex"><b>Powered by Yandex.Translate</b>\n<u>http://translate.yandex.com</u></string>
@@ -22,5 +23,22 @@
 
     <string name="base_url_marvel">https://gateway.marvel.com:443/</string>
     <string name="base_url_yandex">https://translate.yandex.net/</string>
+
+    <string name="durability">Durability</string>
+    <string name="energy">Energy</string>
+    <string name="fighting_skills">Fighting skills</string>
+    <string name="intelligence">Intelligence</string>
+    <string name="speed">Speed</string>
+    <string name="strength">Strength</string>
+
+    <string name="physical_traits">Physical Traits</string>
+    <string name="height">HEIGHT</string>
+    <string name="weight">WEIGHT</string>
+    <string name="eyes">EYES</string>
+    <string name="hair">HAIR</string>
+
+    <string name="bio_data">Biographic</string>
+
+    <string name="power_stats">Power Stats</string>
 
 </resources>
